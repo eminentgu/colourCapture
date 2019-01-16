@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+#以捕捉手指上系的蓝色便签条为例
+#摄像头480p，ubuntu 18.10
+#拍摄图片中不能出现其他蓝色物品啦。
 import random
 import time 
 import cv2
@@ -24,12 +27,13 @@ def getpicture():
     lower_blue = np.array([100,90,99])
     upper_blue = np.array([124,255,255])
 
-    # 获得黑色区域的mask
+    # 获得蓝色区域的mask
     mask = cv2.inRange(hsv, lower_blue, upper_blue)
     mask = cv2.blur(mask,(10,10))
-    # 和原始图片进行and操作，获得黑色区域
+    # 和原始图片进行and操作，获得蓝色区域
     res = cv2.bitwise_and(frame,frame, mask= mask)
     res = cv2.blur(res,(10,10))
+    #以下这些调试用的
     cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
     cv2.imshow('frame',frame)
     cv2.namedWindow('mask', cv2.WINDOW_NORMAL)
@@ -51,6 +55,7 @@ def getlocation(mask):
 while True:
     mask = getpicture()
     getlocation(mask)
+   #停一下好像效果更好
     time.sleep(0.01)
     k = cv2.waitKey(5) & 0xFF
     if k == 27:
